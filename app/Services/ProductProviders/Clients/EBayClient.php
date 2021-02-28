@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services\ProductProviders;
+namespace App\Services\ProductProviders\Clients;
 
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\TransferException;
 
-class EBay extends HttpClient
+class EBayClient extends AbstractClient
 {
     public $baseUri = 'http://svcs.sandbox.ebay.com/';
     public $endpoints = [
@@ -53,6 +53,7 @@ class EBay extends HttpClient
             // if ($e->hasResponse()) {
             //     echo Psr7\Message::toString($e->getResponse());
             // }
+            return null;
         }
     }
 }

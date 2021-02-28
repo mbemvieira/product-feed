@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Services\ProductProviders\EBay;
+use App\Services\ProductProviders\Clients\EBayClient;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,8 +14,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(EBay::class, function() {
-            return new EBay();
+        $this->app->singleton(EBayClient::class, function() {
+            return new EBayClient();
         });
     }
 }

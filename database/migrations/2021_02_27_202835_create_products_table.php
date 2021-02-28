@@ -15,20 +15,20 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             // $table->id();
+            $table->foreignId('keyword_id')->constrained();
             $table->string('provider', 128);
             $table->string('item_id', 128);
-            $table->string('click_out_link', 512);
-            $table->string('main_photo_url', 512);
-            $table->decimal('price', 12, 2);
-            $table->string('price_currency', 3);
-            $table->decimal('shipping_price', 12, 2);
-            $table->string('title', 128);
-            $table->string('description', 256);
-            $table->date('valid_until');
-            $table->string('brand', 128);
+            $table->string('click_out_link', 512)->nullable();
+            $table->string('main_photo_url', 512)->nullable();
+            $table->decimal('price', 12, 2)->nullable();
+            $table->string('price_currency', 3)->nullable();
+            $table->decimal('shipping_price', 12, 2)->nullable();
+            $table->string('title', 128)->nullable();
+            $table->string('description', 256)->nullable();
+            $table->date('valid_until')->nullable();
+            $table->string('brand', 128)->nullable();
             $table->timestamps();
 
-            $table->foreignId('keyword_id')->constrained();
             $table->primary(['keyword_id', 'provider', 'item_id']);
         });
     }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services\ProductProviders;
+namespace App\Services\ProductProviders\Clients;
 
 use GuzzleHttp\Client;
 
-abstract class HttpClient implements ProvidersContract
+abstract class AbstractClient implements ProvidersContract
 {
     public $client = null;
 

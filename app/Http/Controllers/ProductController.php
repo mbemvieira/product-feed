@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\ProductProviders\EBay;
+use App\Services\ProductProviders\Clients\EBayClient;
+use App\Services\ProductProviders\Mappers\EbayMapper;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -17,7 +18,7 @@ class ProductController extends Controller
         //
     }
 
-    public function get(Request $request, EBay $provider)
+    public function get(Request $request, EBayClient $provider)
     {
         $response = $provider->sendRequest([
             'keywords' => 'harry potter',
@@ -25,9 +26,14 @@ class ProductController extends Controller
             'pageNumber' => 1
         ]);
 
-        // if ($response->getStatusCode() !== 200) return response()->json('Error');
+        if ($response === null) return response('Error', 500);
 
-        // return response()->json(['name' => 'Abigail', 'state' => 'CA']);
-        return response()->json(json_decode($response));
+        // return response()->json(json_decode($response));
+
+        $mapper = new EbayMapper(json_decode($response));
+
+        if (!$mapper->isValidContent()) return response('Error', 500);
+
+        return response()->json(['products' => $mapper->getProducts()]);
     }
 }
