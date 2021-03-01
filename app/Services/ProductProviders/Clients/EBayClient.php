@@ -2,16 +2,12 @@
 
 namespace App\Services\ProductProviders\Clients;
 
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Exception\TransferException;
-
 class EBayClient extends AbstractClient
 {
     public $baseUri = 'http://svcs.sandbox.ebay.com/';
     public $endpoints = [
         'findingService' => 'services/search/FindingService/v1',
     ];
-    public $headers = null;
 
     public function __construct()
     {
@@ -27,7 +23,7 @@ class EBayClient extends AbstractClient
         ];
     }
 
-    public function sendRequest(array $params = [])
+    public function get(array $params = [])
     {
         $content = [
             'keywords' => $params['keywords'],
@@ -37,23 +33,6 @@ class EBayClient extends AbstractClient
             ]
         ];
 
-        try {
-            $response = $this->client->request(
-                'POST',
-                $this->endpoints['findingService'],
-                [
-                    'headers' => $this->headers,
-                    'json' => $content,
-                ]
-            );
-
-            return $response->getBody()->getContents();
-        } catch (TransferException $e) {
-            // echo Psr7\Message::toString($e->getResponse());
-            // if ($e->hasResponse()) {
-            //     echo Psr7\Message::toString($e->getResponse());
-            // }
-            return null;
-        }
+        return parent::send('POST', $this->endpoints['findingService'], $content);
     }
 }

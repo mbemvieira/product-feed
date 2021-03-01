@@ -2,6 +2,9 @@
 
 namespace App\Services\ProductProviders\Mappers;
 
+use DateInterval;
+use DateTime;
+
 class EbayMapper extends AbstractMapper
 {
     public function __construct($content)
@@ -30,13 +33,16 @@ class EbayMapper extends AbstractMapper
                 'item_id' => $item->itemId[0],
                 'click_out_link' => $item->viewItemURL[0] ?? null,
                 'main_photo_url' => $item->galleryURL[0] ?? null,
-                'price' => $item->sellingStatus[0]->currentPrice[0]->__value__ ?? null,
-                'price_currency' => $item->sellingStatus[0]->currentPrice[0]->{'@currencyId'} ?? null,
+                'price' => $item->sellingStatus[0]->currentPrice[0]->__value__ ?? 0,
+                'price_currency' => $item->sellingStatus[0]->currentPrice[0]->{'@currencyId'} ?? 'USD',
                 'shipping_price' => $item->sellingStatus[0]->shippingServiceCost[0]->__value__ ?? null,
-                'title' => $item->title[0] ?? null,
+                'title' => $item->title[0] ?? 'No Title',
                 'description' => null,
                 'valid_until' => $item->listingInfo[0]->endTime[0] ?? null,
                 'brand' => null,
+                'expiry_datetime' => (new DateTime('now'))
+                    ->add(new DateInterval('P1D'))
+                    ->format('Y-m-d H:i:s'),
             ];
 
             $this->products[] = $product;

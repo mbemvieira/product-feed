@@ -17,7 +17,7 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('/product', 'ProductController@get');
+$router->get('/products', 'ProductController@get');
 
 $router->get('/key', function() {
     return \Illuminate\Support\Str::random(32);

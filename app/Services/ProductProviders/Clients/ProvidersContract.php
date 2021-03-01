@@ -4,5 +4,9 @@ namespace App\Services\ProductProviders\Clients;
 
 interface ProvidersContract
 {
-    public function sendRequest(array $params = []);
+    public function send(
+        string $httpMethod,
+        string $endpoint,
+        array $content = []
+    );
 }

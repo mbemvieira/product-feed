@@ -12,6 +12,7 @@ class Product extends Model
      * @var array
      */
     protected $fillable = [
+        'provider',
         'item_id',
         'click_out_link',
         'main_photo_url',
@@ -22,5 +23,6 @@ class Product extends Model
         'description',
         'valid_until',
         'brand',
+        'expiry_datetime',
     ];
 }

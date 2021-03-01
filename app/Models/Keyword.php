@@ -12,6 +12,7 @@ class Keyword extends Model
      * @var array
      */
     protected $fillable = [
-        'name'
+        'name',
+        'expiry_datetime',
     ];
 }

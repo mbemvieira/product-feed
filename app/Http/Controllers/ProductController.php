@@ -2,38 +2,45 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\ProductProviders\Clients\EBayClient;
-use App\Services\ProductProviders\Mappers\EbayMapper;
+use App\Jobs\ProductProvidersJob;
+use App\Repositories\KeywordRepository;
+use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    private $productRepository;
+    private $keywordRepository;
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
-    {
-        //
+    public function __construct(
+        ProductRepository $productRepository,
+        KeywordRepository $keywordRepository
+    ) {
+        $this->productRepository = $productRepository;
+        $this->keywordRepository = $keywordRepository;
     }
 
-    public function get(Request $request, EBayClient $provider)
+    public function get(Request $request)
     {
-        $response = $provider->sendRequest([
-            'keywords' => 'harry potter',
-            'entriesPerPage' => 2,
-            'pageNumber' => 1
+        $this->validate($request, [
+            'keywords' => 'required',
+            'price_min' => 'required_with:price_max|numeric',
+            'price_max' => 'required_with:price_min|numeric',
+            'sorting' => 'alpha_dash'
         ]);
 
-        if ($response === null) return response('Error', 500);
+        $parameters = $request->all();
 
-        // return response()->json(json_decode($response));
+        if (!$this->keywordRepository->hasValidKeyword($parameters['keywords'])) {
+            dispatch(new ProductProvidersJob($parameters));
+        }
 
-        $mapper = new EbayMapper(json_decode($response));
-
-        if (!$mapper->isValidContent()) return response('Error', 500);
-
-        return response()->json(['products' => $mapper->getProducts()]);
+        return response()->json([
+            'products' => $this->productRepository->get($parameters)
+        ]);
     }
 }

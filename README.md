@@ -1,24 +1,60 @@
-# Lumen PHP Framework
+# product-feed
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
+Fetch products list from several providers and present it through API.
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+## Architecture
 
-## Official Documentation
+1- Using Lumen's queues and jobs to create asynchronous requests to providers. This prevents external API failures to break the entire application or to spend a lot time waiting for response. The main drawback is the higher code complexity and the need of a database to store a copy of the requested data locally.
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+2- Using a centralized Providers Manager, it is possible to handle all the registered providers in one place and call each one of them in a loop.
 
-## Contributing
+## Environment Requirements
 
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Check Lumen 8.x documentation for environment requirements.
 
-## Security Vulnerabilities
+## Installation
 
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+Clone this repo into your machine:
 
-## License
+```bash
+git clone https://github.com/mbemvieira/product-feed
+```
 
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Inside your repo folder, run the following commands:
+
+```bash
+composer install
+cp .env.testing .env
+```
+
+Inside .env file:
+
+- Generate a key. Go to the /key endpoint and fill the APP_KEY variable with the generated string.
+- Set your database configuration and credentials.
+- Set the provider credentials (EBAY_CREDENTIALS).
+- Set the QUEUE_CONNECTION variable (usually, database or sync).
+
+Run migrations.
+
+```bash
+php artisan migrate
+```
+
+Run your php server locally
+
+```bash
+php -S localhost:8000 -t public
+```
+
+## API Reference
+
+```
+GET <APP-HOSTNAME>/products
+```
+
+Query string parameters:
+
+- keywords: required
+- price_min: required_with:price_max|numeric
+- price_max: required_with:price_min|numeric'
+- sorting: 'default'|'by_price_asc'
