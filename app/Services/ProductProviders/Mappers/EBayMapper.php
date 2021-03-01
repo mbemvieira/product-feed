@@ -5,7 +5,7 @@ namespace App\Services\ProductProviders\Mappers;
 use DateInterval;
 use DateTime;
 
-class EbayMapper extends AbstractMapper
+class EBayMapper extends AbstractMapper
 {
     public function __construct($content)
     {
