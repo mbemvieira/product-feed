@@ -24,7 +24,7 @@ Inside your repo folder, run the following commands:
 
 ```bash
 composer install
-cp .env.testing .env
+cp .env.example .env
 ```
 
 Inside .env file:
