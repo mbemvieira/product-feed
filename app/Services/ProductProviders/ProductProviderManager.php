@@ -5,7 +5,7 @@ namespace App\Services\ProductProviders;
 use App\Repositories\KeywordRepository;
 use App\Repositories\ProductRepository;
 use App\Services\ProductProviders\Clients\EBayClient;
-use App\Services\ProductProviders\Mappers\EbayMapper;
+use App\Services\ProductProviders\Mappers\EBayMapper;
 
 class ProductProviderManager
 {
@@ -14,7 +14,7 @@ class ProductProviderManager
     private $productProviders = [
         'eBay' => [
             'client' => EBayClient::class,
-            'mapper' => EbayMapper::class,
+            'mapper' => EBayMapper::class,
         ]
     ];
     private $clientInstances = [];
